@@ -1,9 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.AndroidCalculator" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.Calculator" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorSurfaceInverse">@color/black</item>
+        <item name="colorPrimary">@color/black</item>
     </style>
 
-    <style name="Theme.AndroidCalculator" parent="Base.Theme.AndroidCalculator" />
+    <style name="Theme.Calculator" parent="Base.Theme.Calculator" />
 </resources>
