@@ -216,7 +216,7 @@ class MainActivity : AppCompatActivity() {
             btnDecimal.isEnabled = true
 
             val text = resultView.text.toString()
-            val operators = listOf("+", "-", "÷", "*", "^")
+            val operators = listOf("+", "-", "÷", "×", "^")
 
             var operationDone = false
 
@@ -232,7 +232,7 @@ class MainActivity : AppCompatActivity() {
                                 "+" -> num1 + num2
                                 "-" -> num1 - num2
                                 "÷" -> num1 / num2
-                                "*" -> num1 * num2
+                                "×" -> num1 * num2
                                 "^" -> Math.pow(num1, num2)
                                 else -> null
                             }
