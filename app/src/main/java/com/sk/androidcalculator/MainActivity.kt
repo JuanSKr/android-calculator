@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity() {
                 if (number >= 0) {
                     val result = Math.sqrt(number)
                     resultView.text = result.toString()
-                    resultView.text = "√" + number.toInt() + " = " + result
+                    historyView.text = "√" + number.toInt() + " = " + result
                 } else {
                     Toast.makeText(this, "The number cannot be negative.", Toast.LENGTH_SHORT)
                         .show()
