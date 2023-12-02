@@ -20,5 +20,5 @@
     <string name="button_clear_entry">CE</string>
     <string name="button_negate">+/-</string>
     <string name="button_power">^</string>
-    <string name="button_root">√</string>
+    <string name="button_sqrt">√</string>
 </resources>
