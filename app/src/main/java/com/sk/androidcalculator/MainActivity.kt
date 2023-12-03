@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                     resultView.text = index.toString()
                 } else {
                     if(numCount == 7) {
-                        resultView.textSize = 29.5F
+                        resultView.textSize = 29F
                     }
                     if (numCount >= 10) {
                         Toast.makeText(
