@@ -97,6 +97,7 @@
                 android:backgroundTint="@color/gray_light"
                 android:text="@string/button_sqrt"
                 android:textColor="@color/black"
+                android:fontFamily="monospace"
                 android:textSize="28sp"
                 android:textStyle="bold" />
 
@@ -109,6 +110,7 @@
                 android:backgroundTint="@color/gray_light"
                 android:text="@string/button_percent"
                 android:textColor="@color/black"
+
                 android:textSize="25sp"
                 android:textStyle="bold" />
 
@@ -121,7 +123,7 @@
                 android:backgroundTint="@color/gray_light"
                 android:text="@string/button_negate"
                 android:textColor="@color/black"
-                android:textSize="29sp"
+                android:textSize="25sp"
                 android:textStyle="bold" />
 
             <Button
@@ -133,8 +135,7 @@
                 android:backgroundTint="@color/orange"
                 android:text="@string/button_divide"
                 android:textColor="@color/white"
-                android:textSize="33sp"
-                android:textStyle="bold" />
+                android:textSize="33sp" />
         </LinearLayout>
 
         <LinearLayout

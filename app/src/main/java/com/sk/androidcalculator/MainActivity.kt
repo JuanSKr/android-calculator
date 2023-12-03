@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                 if (currentText == "0") {
                     resultView.text = index.toString()
                 } else {
-                    if(numCount == 9) {
+                    if(numCount == 7) {
                         resultView.textSize = 29.5F
                     }
                     if (numCount >= 10) {
