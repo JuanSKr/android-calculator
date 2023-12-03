@@ -15,6 +15,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        var numCount = 0
+
         val btn0: Button = findViewById(R.id.btn0)
         val btn1: Button = findViewById(R.id.btn1)
         val btn2: Button = findViewById(R.id.btn2)
@@ -85,6 +87,104 @@ class MainActivity : AppCompatActivity() {
         }
 
         /**
+         * Resets the value of `numCount` to 0.
+         */
+        fun resetNumCount() {
+            numCount = 0
+        }
+
+        fun limitReachedError() {
+            Toast.makeText(
+                this,
+                "You have reached the maximum number of digits.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        fun copiedMsg() {
+            Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+        }
+
+        fun enterNumberFirstError() {
+            Toast.makeText(this, "Enter a number first", Toast.LENGTH_SHORT).show()
+        }
+
+        fun negativeNumberError() {
+            Toast.makeText(this, "The number cannot be negative.", Toast.LENGTH_SHORT).show()
+        }
+
+        fun twoNumbersError() {
+            Toast.makeText(this, "You must write 2 numbers.", Toast.LENGTH_SHORT).show()
+        }
+
+        /**
+         * Calculates the module of a given number.
+         * The module is calculated by dividing the number by 100.
+         * The result is displayed in the resultView.
+         * The calculation history is displayed in the historyView.
+         * Resets the number count.
+         *
+         * @param number The number to calculate the module for.
+         */
+        fun calculateModule(number: Double) {
+            val result = number / 100
+            resultView.text = result.toString()
+            historyView.text = number.toInt().toString() + "% = " + result
+            resetNumCount()
+        }
+
+        /**
+         * Calculates the square root of a given number and updates the result view and history view.
+         *
+         * @param number The number to calculate the square root of.
+         */
+        fun calculateSqrt(number: Double) {
+            val result = Math.sqrt(number)
+            resultView.text = result.toString()
+            historyView.text = "√" + number.toInt() + " = " + result
+            resetNumCount()
+        }
+
+
+        /**
+         * Updates the result view with the given number at the specified index.
+         *
+         * @param currentText The current text displayed in the result view.
+         * @param index The index of the number to be added.
+         * @param numCount The count of numbers currently displayed in the result view.
+         */
+        fun putNumber(currentText: String, index: Int, numCount: Int) {
+            if (currentText == "0") {
+                resultView.text = index.toString()
+            } else {
+                if (numCount == 7) {
+                    resultView.textSize = 29F
+                }
+                if (numCount >= 10) {
+                    limitReachedError()
+                } else {
+                    resultView.text = currentText + index
+                }
+            }
+        }
+
+        /**
+         * Checks if an operation has been done and updates the history view accordingly.
+         *
+         * @param operationDone Indicates whether an operation has been performed.
+         * @param text The text to be displayed in the history view.
+         */
+        fun operationCheck(operationDone: Boolean, text: String) {
+            if (!operationDone) {
+                twoNumbersError()
+                clearHistory()
+            } else {
+                historyView.text = text + " = " + resultView.text
+            }
+        }
+
+
+        /**
          * This code initializes a list of buttons in the MainActivity class.
          * The buttons are assigned to the corresponding views in the layout file.
          * The list contains the following buttons:
@@ -107,41 +207,6 @@ class MainActivity : AppCompatActivity() {
         )
 
         /**
-         * Updates the result view with the given number at the specified index.
-         *
-         * @param currentText The current text displayed in the result view.
-         * @param index The index of the number to be added.
-         * @param numCount The count of numbers currently displayed in the result view.
-         */
-        fun putNumber(currentText: String, index: Int, numCount: Int) {
-            if (currentText == "0") {
-                resultView.text = index.toString()
-            } else {
-                if (numCount == 7) {
-                    resultView.textSize = 29F
-                }
-                if (numCount >= 10) {
-                    Toast.makeText(
-                        this,
-                        "You have reached the maximum number of digits.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    resultView.text = currentText + index
-                }
-            }
-        }
-
-        var numCount = 0
-
-        /**
-         * Resets the value of `numCount` to 0.
-         */
-        fun resetNumCount() {
-            numCount = 0
-        }
-
-        /**
          * Iterates through a list of buttons and sets an onClickListener for each button.
          * It increments the `numCount` variable and retrieves the current text from `resultView`.
          * Then, it calls the `putNumber` function with the current text, the index of the button, and the updated `numCount`.
@@ -155,7 +220,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
         /**
          * This code block handles the click event for the resultView and btnClean buttons.
          * - When the resultView is clicked and its text is not "0", it copies the text to the clipboard and displays a toast message.
@@ -165,7 +229,7 @@ class MainActivity : AppCompatActivity() {
         resultView.setOnClickListener {
             val text = resultView.text.toString()
             if (text != "0") {
-                Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+                copiedMsg()
                 val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
                 val clip = ClipData.newPlainText("label", text)
                 clipboard.setPrimaryClip(clip)
@@ -220,8 +284,7 @@ class MainActivity : AppCompatActivity() {
          */
         btnPlus.setOnClickListener {
             if (resultView.text == "0") {
-                Toast.makeText(this, "Enter a number first", Toast.LENGTH_SHORT).show()
-
+                enterNumberFirstError()
             } else {
                 resultView.text = resultView.text.toString() + " + "
                 deactivateButtons()
@@ -238,7 +301,7 @@ class MainActivity : AppCompatActivity() {
          */
         btnMinus.setOnClickListener {
             if (resultView.text == "0") {
-                Toast.makeText(this, "Enter a number first", Toast.LENGTH_SHORT).show()
+                enterNumberFirstError()
 
             } else {
                 resultView.text = resultView.text.toString() + " - "
@@ -256,7 +319,7 @@ class MainActivity : AppCompatActivity() {
          */
         btnMultiply.setOnClickListener {
             if (resultView.text == "0") {
-                Toast.makeText(this, "Enter a number first", Toast.LENGTH_SHORT).show()
+                enterNumberFirstError()
 
             } else {
                 resultView.text = resultView.text.toString() + " × "
@@ -273,25 +336,13 @@ class MainActivity : AppCompatActivity() {
          */
         btnDivide.setOnClickListener {
             if (resultView.text == "0") {
-                Toast.makeText(this, "Enter a number first", Toast.LENGTH_SHORT).show()
+                enterNumberFirstError()
             } else {
                 resultView.text = resultView.text.toString() + " ÷ "
                 deactivateButtons()
                 btnDecimal.isEnabled = true
                 resetNumCount()
             }
-        }
-
-        /**
-         * Calculates the square root of a given number and updates the result view and history view.
-         *
-         * @param number The number to calculate the square root of.
-         */
-        fun calculateSqrt(number: Double) {
-            val result = Math.sqrt(number)
-            resultView.text = result.toString()
-            historyView.text = "√" + number.toInt() + " = " + result
-            resetNumCount()
         }
 
         /**
@@ -306,28 +357,11 @@ class MainActivity : AppCompatActivity() {
                 if (number >= 0) {
                     calculateSqrt(number)
                 } else {
-                    Toast.makeText(this, "The number cannot be negative.", Toast.LENGTH_SHORT)
-                        .show()
+                    negativeNumberError()
                 }
             } else {
-                Toast.makeText(this, "The number cannot be negative.", Toast.LENGTH_SHORT).show()
+                enterNumberFirstError()
             }
-        }
-
-        /**
-         * Calculates the module of a given number.
-         * The module is calculated by dividing the number by 100.
-         * The result is displayed in the resultView.
-         * The calculation history is displayed in the historyView.
-         * Resets the number count.
-         *
-         * @param number The number to calculate the module for.
-         */
-        fun calculateModule(number: Double) {
-            val result = number / 100
-            resultView.text = result.toString()
-            historyView.text = number.toInt().toString() + "% = " + result
-            resetNumCount()
         }
 
         /**
@@ -338,7 +372,7 @@ class MainActivity : AppCompatActivity() {
          */
         btnModule.setOnClickListener {
             if (resultView.text == "0") {
-                Toast.makeText(this, "Enter a number first", Toast.LENGTH_SHORT).show()
+                enterNumberFirstError()
             } else {
                 val number = resultView.text.toString().toDoubleOrNull()
                 calculateModule(number!!)
@@ -353,7 +387,7 @@ class MainActivity : AppCompatActivity() {
          */
         btnDecimal.setOnClickListener {
             if (resultView.text == "0") {
-                Toast.makeText(this, "You must write a number.", Toast.LENGTH_SHORT).show()
+                enterNumberFirstError()
             } else {
                 resultView.text = resultView.text.toString() + "."
                 btnDecimal.isEnabled = false
@@ -372,21 +406,6 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     resultView.text = "-$text"
                 }
-            }
-        }
-
-        /**
-         * Checks if an operation has been done and updates the history view accordingly.
-         *
-         * @param operationDone Indicates whether an operation has been performed.
-         * @param text The text to be displayed in the history view.
-         */
-        fun operationCheck(operationDone: Boolean, text: String) {
-            if (!operationDone) {
-                Toast.makeText(this, "You must write 2 numbers.", Toast.LENGTH_SHORT).show()
-                clearHistory()
-            } else {
-                historyView.text = text + " = " + resultView.text
             }
         }
 
