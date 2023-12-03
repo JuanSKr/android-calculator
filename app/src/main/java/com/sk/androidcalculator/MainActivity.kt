@@ -64,6 +64,10 @@ class MainActivity : AppCompatActivity() {
             resultView.textSize = 32F
         }
 
+        fun clearHistory() {
+            historyView.text = ""
+        }
+
         val buttons = listOf(
             btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9,
             btnEqual, btnPlus, btnMinus, btnMultiply, btnDivide, btnSqrt, btnPower,
@@ -81,12 +85,12 @@ class MainActivity : AppCompatActivity() {
                     resultView.text = index.toString()
                 } else {
                     if (numCount >= 10) {
+                        resultView.textSize = 27F
                         Toast.makeText(
                             this,
                             "You have reached the maximum number of digits.",
                             Toast.LENGTH_SHORT
                         ).show()
-                        resultView.textSize = 32F
                     } else {
                         resultView.text = currentText + index
                     }
@@ -112,7 +116,7 @@ class MainActivity : AppCompatActivity() {
 
         btnCleanAll.setOnClickListener {
             resultView.text = "0"
-            historyView.text = ""
+            clearHistory()
             defaultSize()
             activateButtons()
             btnDecimal.isEnabled = true
@@ -167,14 +171,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        fun calculateSqrt(number: Double) {
+            val result = Math.sqrt(number)
+            resultView.text = result.toString()
+            historyView.text = "√" + number.toInt() + " = " + result
+            numCount = 0
+        }
+
         btnSqrt.setOnClickListener {
             val number = resultView.text.toString().toDoubleOrNull()
             if (number != null) {
                 if (number >= 0) {
-                    val result = Math.sqrt(number)
-                    resultView.text = result.toString()
-                    historyView.text = "√" + number.toInt() + " = " + result
-                    numCount = 0
+                    calculateSqrt(number)
                 } else {
                     Toast.makeText(this, "The number cannot be negative.", Toast.LENGTH_SHORT)
                         .show()
@@ -216,6 +224,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        fun operationCheck(operationDone: Boolean, text: String) {
+            if (!operationDone) {
+                Toast.makeText(this, "You must write 2 numbers.", Toast.LENGTH_SHORT).show()
+                clearHistory()
+            } else {
+                historyView.text = text + " = " + resultView.text
+            }
+        }
+
         btnEqual.setOnClickListener {
             activateButtons()
             btnDecimal.isEnabled = true
@@ -252,12 +269,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            if (!operationDone) {
-                Toast.makeText(this, "You must write 2 numbers.", Toast.LENGTH_SHORT).show()
-                historyView.text = ""
-            } else {
-                historyView.text = text + " = " + resultView.text
-            }
+            operationCheck(operationDone, text)
         }
     }
 }
