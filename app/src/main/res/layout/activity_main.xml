@@ -49,7 +49,7 @@
                 android:padding="8dp"
                 android:text="@string/button_0"
                 android:textColor="@color/white"
-                android:textSize="35sp"
+                android:textSize="33.5sp"
                 android:textStyle="bold" />
 
         </LinearLayout>

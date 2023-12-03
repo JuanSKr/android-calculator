@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         fun defaultSize() {
-            resultView.textSize = 35F
+            resultView.textSize = 32F
         }
 
         val buttons = listOf(
@@ -70,31 +70,27 @@ class MainActivity : AppCompatActivity() {
             btnClean, btnCleanAll, btnDecimal, btnNegate
         )
 
+        var numCount = 0
+
         for ((index, button) in buttons.withIndex()) {
             button.setOnClickListener {
+                numCount++
                 val currentText = resultView.text.toString()
-                val operatorIndex = currentText.indexOfAny(charArrayOf('+', '-', '×', '÷', '^'))
-                if (operatorIndex != -1 && currentText.length - operatorIndex > 10) {
-                    Toast.makeText(
-                        this,
-                        "Maximum number of digits reached",
-                        Toast.LENGTH_SHORT
-                    ).show()
+
+                if (currentText == "0") {
+                    resultView.text = index.toString()
                 } else {
-                    if (currentText == "0") {
-                        resultView.text = index.toString()
+                    if (numCount >= 10) {
+                        Toast.makeText(
+                            this,
+                            "You have reached the maximum number of digits.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        resultView.textSize = 32F
                     } else {
-                        if (currentText.length == 9) {
-                            Toast.makeText(
-                                this,
-                                "Maximum number of digits reached",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            resultView.textSize = 27F
-                        } else {
-                            resultView.text = currentText + index
-                        }
+                        resultView.text = currentText + index
                     }
+
                 }
             }
         }
@@ -103,12 +99,14 @@ class MainActivity : AppCompatActivity() {
             val text = resultView.text.toString()
             if (text.isNotEmpty()) {
                 resultView.text = text.substring(0, text.length - 1)
+                numCount--
             }
             if (resultView.text.isEmpty() || resultView.text.length == 1) {
                 resultView.text = "0"
                 defaultSize()
                 activateButtons()
                 btnDecimal.isEnabled = true
+                numCount = 0
             }
         }
 
@@ -118,6 +116,7 @@ class MainActivity : AppCompatActivity() {
             defaultSize()
             activateButtons()
             btnDecimal.isEnabled = true
+            numCount = 0
         }
 
         btnPlus.setOnClickListener {
@@ -128,6 +127,7 @@ class MainActivity : AppCompatActivity() {
                 resultView.text = resultView.text.toString() + " + "
                 deactivateButtons()
                 btnDecimal.isEnabled = true
+                numCount = 0
             }
         }
 
@@ -139,6 +139,7 @@ class MainActivity : AppCompatActivity() {
                 resultView.text = resultView.text.toString() + " - "
                 deactivateButtons()
                 btnDecimal.isEnabled = true
+                numCount = 0
             }
         }
 
@@ -150,6 +151,7 @@ class MainActivity : AppCompatActivity() {
                 resultView.text = resultView.text.toString() + " × "
                 deactivateButtons()
                 btnDecimal.isEnabled = true
+                numCount = 0
             }
         }
 
@@ -161,6 +163,7 @@ class MainActivity : AppCompatActivity() {
                 resultView.text = resultView.text.toString() + " ÷ "
                 deactivateButtons()
                 btnDecimal.isEnabled = true
+                numCount = 0
             }
         }
 
@@ -171,6 +174,7 @@ class MainActivity : AppCompatActivity() {
                     val result = Math.sqrt(number)
                     resultView.text = result.toString()
                     historyView.text = "√" + number.toInt() + " = " + result
+                    numCount = 0
                 } else {
                     Toast.makeText(this, "The number cannot be negative.", Toast.LENGTH_SHORT)
                         .show()
@@ -188,6 +192,7 @@ class MainActivity : AppCompatActivity() {
                 resultView.text = resultView.text.toString() + " ^ "
                 deactivateButtons()
                 btnDecimal.isEnabled = true
+                numCount = 0
             }
         }
 
@@ -214,6 +219,7 @@ class MainActivity : AppCompatActivity() {
         btnEqual.setOnClickListener {
             activateButtons()
             btnDecimal.isEnabled = true
+            numCount = 0
 
             val text = resultView.text.toString()
             val operators = listOf("+", "-", "÷", "×", "^")
