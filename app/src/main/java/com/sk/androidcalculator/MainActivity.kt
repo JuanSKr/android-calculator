@@ -1,6 +1,8 @@
 package com.sk.androidcalculator
 
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -42,6 +44,9 @@ class MainActivity : AppCompatActivity() {
 
         val btnNegate: Button = findViewById(R.id.btnNegate)
 
+        /**
+         * Enables the buttons for addition, subtraction, multiplication, division, and square root.
+         */
         fun activateButtons() {
             btnPlus.isEnabled = true
             btnMinus.isEnabled = true
@@ -50,6 +55,9 @@ class MainActivity : AppCompatActivity() {
             btnSqrt.isEnabled = true
         }
 
+        /**
+         * Disables the buttons for addition, subtraction, multiplication, division, and square root.
+         */
         fun deactivateButtons() {
             btnPlus.isEnabled = false
             btnMinus.isEnabled = false
@@ -58,19 +66,61 @@ class MainActivity : AppCompatActivity() {
             btnSqrt.isEnabled = false
         }
 
+        /**
+         * Sets the text size of the result view to the default size.
+         */
         fun defaultSize() {
-            resultView.textSize = 35F
+            resultView.textSize = 33F
         }
 
+        /**
+         * Clears the history view.
+         */
         fun clearHistory() {
             historyView.text = ""
         }
 
+        /**
+         * This code initializes a list of buttons in the MainActivity class.
+         * The buttons are assigned to the corresponding views in the layout file.
+         * The list contains the following buttons:
+         * - btn0 to btn9: Numeric buttons representing digits 0 to 9.
+         * - btnEqual: Button for performing the equal operation.
+         * - btnPlus: Button for performing addition operation.
+         * - btnMinus: Button for performing subtraction operation.
+         * - btnMultiply: Button for performing multiplication operation.
+         * - btnDivide: Button for performing division operation.
+         * - btnSqrt: Button for performing square root operation.
+         * - btnClean: Button for clearing the current input.
+         * - btnCleanAll: Button for clearing all input and operations.
+         * - btnDecimal: Button for adding decimal point to the input.
+         * - btnNegate: Button for negating the current input.
+         */
         val buttons = listOf(
             btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9,
             btnEqual, btnPlus, btnMinus, btnMultiply, btnDivide, btnSqrt,
             btnClean, btnCleanAll, btnDecimal, btnNegate
         )
+
+        fun putNumber(currentText: String, index: Int, numCount: Int) {
+            if (currentText == "0") {
+                resultView.text = index.toString()
+            } else {
+                if (numCount == 7) {
+                    resultView.textSize = 29F
+                }
+                if (numCount >= 10) {
+                    Toast.makeText(
+                        this,
+                        "You have reached the maximum number of digits.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    resultView.text = currentText + index
+                }
+
+            }
+        }
 
         var numCount = 0
 
@@ -79,23 +129,19 @@ class MainActivity : AppCompatActivity() {
                 numCount++
                 val currentText = resultView.text.toString()
 
-                if (currentText == "0") {
-                    resultView.text = index.toString()
-                } else {
-                    if (numCount == 7) {
-                        resultView.textSize = 31F
-                    }
-                    if (numCount >= 10) {
-                        Toast.makeText(
-                            this,
-                            "You have reached the maximum number of digits.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        resultView.text = currentText + index
-                    }
+                putNumber(currentText, index, numCount)
 
-                }
+            }
+        }
+
+
+        resultView.setOnClickListener{
+            val text = resultView.text.toString()
+            if (text != "0") {
+                Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+                val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText("label", text)
+                clipboard.setPrimaryClip(clip)
             }
         }
 
