@@ -80,6 +80,10 @@ class MainActivity : AppCompatActivity() {
             historyView.text = ""
         }
 
+        fun clearResult() {
+            resultView.text = "0"
+        }
+
         /**
          * This code initializes a list of buttons in the MainActivity class.
          * The buttons are assigned to the corresponding views in the layout file.
@@ -102,6 +106,13 @@ class MainActivity : AppCompatActivity() {
             btnClean, btnCleanAll, btnDecimal, btnNegate
         )
 
+        /**
+         * Updates the result view with the given number at the specified index.
+         *
+         * @param currentText The current text displayed in the result view.
+         * @param index The index of the number to be added.
+         * @param numCount The count of numbers currently displayed in the result view.
+         */
         fun putNumber(currentText: String, index: Int, numCount: Int) {
             if (currentText == "0") {
                 resultView.text = index.toString()
@@ -118,24 +129,40 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     resultView.text = currentText + index
                 }
-
             }
         }
 
         var numCount = 0
 
+        /**
+         * Resets the value of `numCount` to 0.
+         */
+        fun resetNumCount() {
+            numCount = 0
+        }
+
+        /**
+         * Iterates through a list of buttons and sets an onClickListener for each button.
+         * It increments the `numCount` variable and retrieves the current text from `resultView`.
+         * Then, it calls the `putNumber` function with the current text, the index of the button, and the updated `numCount`.
+         */
         for ((index, button) in buttons.withIndex()) {
             button.setOnClickListener {
                 numCount++
                 val currentText = resultView.text.toString()
 
                 putNumber(currentText, index, numCount)
-
             }
         }
 
 
-        resultView.setOnClickListener{
+        /**
+         * This code block handles the click event for the resultView and btnClean buttons.
+         * - When the resultView is clicked and its text is not "0", it copies the text to the clipboard and displays a toast message.
+         * - When the btnClean button is clicked, it removes the last character from the resultView text and updates the numCount variable.
+         *   If the resultView text becomes empty or has only one character, it sets the text to "0", resets the UI state, enables the btnDecimal button, and resets the numCount variable.
+         */
+        resultView.setOnClickListener {
             val text = resultView.text.toString()
             if (text != "0") {
                 Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_SHORT).show()
@@ -145,6 +172,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /**
+         * This code block contains event handlers for the "Clean", "Clean All", and "Plus" buttons in the MainActivity.kt file.
+         *
+         * - The "Clean" button removes the last character from the resultView text if it is not empty. If the resultView text becomes empty or contains only one character, it sets the text to "0", resets the button states, enables the decimal button, and resets the numCount variable.
+         *
+         * - The "Clean All" button sets the resultView text to "0", clears the history, resets the button states, enables the decimal button, and resets the numCount variable.
+         *
+         * - The "Plus" button appends " + " to the resultView text if it is not "0". It deactivates the buttons, enables the decimal button, and resets the numCount variable.
+         */
         btnClean.setOnClickListener {
             val text = resultView.text.toString()
             if (text.isNotEmpty()) {
@@ -156,19 +192,32 @@ class MainActivity : AppCompatActivity() {
                 defaultSize()
                 activateButtons()
                 btnDecimal.isEnabled = true
-                numCount = 0
+                resetNumCount()
             }
         }
 
+        /**
+         * This code block handles the click events for the "Clean All", "Plus", and "Minus" buttons.
+         *
+         * - When the "Clean All" button is clicked, it calls the functions clearResult(), clearHistory(), defaultSize(), activateButtons(), resetNumCount(), and enables the "Decimal" button.
+         * - When the "Plus" button is clicked, it checks if the resultView text is "0". If it is, it displays a toast message asking the user to enter a number first. Otherwise, it appends " + " to the resultView text, deactivates the buttons, enables the "Decimal" button, and resets the number count.
+         * - When the "Minus" button is clicked, it checks if the resultView text is "0". If it is, it displays a toast message asking the user to enter a number first. Otherwise, it appends " - " to the resultView text, deactivates the buttons, enables the "Decimal" button, and resets the number count.
+         */
         btnCleanAll.setOnClickListener {
-            resultView.text = "0"
+            clearResult()
             clearHistory()
             defaultSize()
             activateButtons()
             btnDecimal.isEnabled = true
-            numCount = 0
+            resetNumCount()
         }
 
+        /**
+         * This code block handles the click events for the plus, minus, and multiply buttons.
+         * If the resultView text is "0", it displays a toast message asking the user to enter a number first.
+         * Otherwise, it appends the corresponding operator ("+", "-", or "×") to the resultView text.
+         * It also deactivates the buttons, enables the decimal button, and resets the number count.
+         */
         btnPlus.setOnClickListener {
             if (resultView.text == "0") {
                 Toast.makeText(this, "Enter a number first", Toast.LENGTH_SHORT).show()
@@ -177,10 +226,16 @@ class MainActivity : AppCompatActivity() {
                 resultView.text = resultView.text.toString() + " + "
                 deactivateButtons()
                 btnDecimal.isEnabled = true
-                numCount = 0
+                resetNumCount()
             }
         }
 
+        /**
+         * This code block is responsible for handling the click event of the "Minus" button.
+         * If the resultView text is "0", it displays a toast message asking the user to enter a number first.
+         * Otherwise, it appends " - " to the resultView text, deactivates the buttons, enables the decimal button,
+         * and resets the number count.
+         */
         btnMinus.setOnClickListener {
             if (resultView.text == "0") {
                 Toast.makeText(this, "Enter a number first", Toast.LENGTH_SHORT).show()
@@ -189,10 +244,16 @@ class MainActivity : AppCompatActivity() {
                 resultView.text = resultView.text.toString() + " - "
                 deactivateButtons()
                 btnDecimal.isEnabled = true
-                numCount = 0
+                resetNumCount()
             }
         }
 
+        /**
+         * This code block is responsible for handling the click event of the "Multiply" button.
+         * If the current value in the resultView is "0", it displays a toast message asking the user to enter a number first.
+         * Otherwise, it appends " × " to the current value in the resultView, deactivates the buttons, enables the decimal button,
+         * and resets the number count.
+         */
         btnMultiply.setOnClickListener {
             if (resultView.text == "0") {
                 Toast.makeText(this, "Enter a number first", Toast.LENGTH_SHORT).show()
@@ -201,29 +262,44 @@ class MainActivity : AppCompatActivity() {
                 resultView.text = resultView.text.toString() + " × "
                 deactivateButtons()
                 btnDecimal.isEnabled = true
-                numCount = 0
+                resetNumCount()
             }
         }
 
+        /**
+         * This function is called when the divide button is clicked.
+         * It checks if the resultView text is "0" and displays a toast message if true.
+         * Otherwise, it appends " ÷ " to the resultView text, deactivates buttons, enables the decimal button, and resets the number count.
+         */
         btnDivide.setOnClickListener {
             if (resultView.text == "0") {
                 Toast.makeText(this, "Enter a number first", Toast.LENGTH_SHORT).show()
-
             } else {
                 resultView.text = resultView.text.toString() + " ÷ "
                 deactivateButtons()
                 btnDecimal.isEnabled = true
-                numCount = 0
+                resetNumCount()
             }
         }
 
+        /**
+         * Calculates the square root of a given number and updates the result view and history view.
+         *
+         * @param number The number to calculate the square root of.
+         */
         fun calculateSqrt(number: Double) {
             val result = Math.sqrt(number)
             resultView.text = result.toString()
             historyView.text = "√" + number.toInt() + " = " + result
-            numCount = 0
+            resetNumCount()
         }
 
+        /**
+         * This function is called when the "btnSqrt" button is clicked.
+         * It retrieves the number from the "resultView" and checks if it is a valid number.
+         * If the number is valid and greater than or equal to 0, it calls the "calculateSqrt" function.
+         * If the number is not valid or negative, it displays a toast message indicating that the number cannot be negative.
+         */
         btnSqrt.setOnClickListener {
             val number = resultView.text.toString().toDoubleOrNull()
             if (number != null) {
@@ -238,24 +314,43 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /**
+         * Calculates the module of a given number.
+         * The module is calculated by dividing the number by 100.
+         * The result is displayed in the resultView.
+         * The calculation history is displayed in the historyView.
+         * Resets the number count.
+         *
+         * @param number The number to calculate the module for.
+         */
         fun calculateModule(number: Double) {
             val result = number / 100
             resultView.text = result.toString()
             historyView.text = number.toInt().toString() + "% = " + result
-            numCount = 0
+            resetNumCount()
         }
 
+        /**
+         * This function is called when the "btnModule" button is clicked.
+         * It checks if the "resultView" text is "0" and displays a toast message if it is.
+         * Otherwise, it converts the text in "resultView" to a Double and calls the "calculateModule" function with that number.
+         * After the calculation, it resets the number count.
+         */
         btnModule.setOnClickListener {
             if (resultView.text == "0") {
                 Toast.makeText(this, "Enter a number first", Toast.LENGTH_SHORT).show()
-
             } else {
                 val number = resultView.text.toString().toDoubleOrNull()
                 calculateModule(number!!)
-                numCount = 0
+                resetNumCount()
             }
         }
 
+        /**
+         * Handles the click event of the decimal button.
+         * If the result view text is "0", it displays a toast message indicating that a number must be written.
+         * Otherwise, it appends a decimal point to the result view text and disables the decimal button.
+         */
         btnDecimal.setOnClickListener {
             if (resultView.text == "0") {
                 Toast.makeText(this, "You must write a number.", Toast.LENGTH_SHORT).show()
@@ -265,6 +360,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /**
+         * This function is called when the negate button is clicked.
+         * It negates the value displayed in the resultView by adding or removing a negative sign.
+         */
         btnNegate.setOnClickListener {
             val text = resultView.text.toString()
             if (text.isNotEmpty()) {
@@ -276,6 +375,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /**
+         * Checks if an operation has been done and updates the history view accordingly.
+         *
+         * @param operationDone Indicates whether an operation has been performed.
+         * @param text The text to be displayed in the history view.
+         */
         fun operationCheck(operationDone: Boolean, text: String) {
             if (!operationDone) {
                 Toast.makeText(this, "You must write 2 numbers.", Toast.LENGTH_SHORT).show()
@@ -285,11 +390,19 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /**
+         * This code block represents the click event listener for the "Equal" button in the MainActivity.kt file.
+         * It performs the calculation based on the text entered in the resultView and updates the resultView with the calculated result.
+         * The calculation is performed by splitting the text using various operators (+, -, ÷, ×, ^, %) and then evaluating the expression.
+         * If the expression is valid and the calculation is successful, the result is displayed in the resultView.
+         * If the expression is invalid or the calculation fails, the resultView remains unchanged.
+         * Additionally, this code block calls the operationCheck() function to handle any additional operations after the calculation is performed.
+         */
         btnEqual.setOnClickListener {
             activateButtons()
             defaultSize()
             btnDecimal.isEnabled = true
-            numCount = 0
+            resetNumCount()
 
             val text = resultView.text.toString()
             val operators = listOf("+", "-", "÷", "×", "^", "%")
