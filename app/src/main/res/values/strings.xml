@@ -21,4 +21,5 @@
     <string name="button_negate">+/-</string>
     <string name="button_power">^</string>
     <string name="button_sqrt">√</string>
+    <string name="button_percent">%</string>
 </resources>

@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         val btnMultiply: Button = findViewById(R.id.btnMultiply)
         val btnDivide: Button = findViewById(R.id.btnDivide)
         val btnSqrt: Button = findViewById(R.id.btnSqrt)
-        val btnPower: Button = findViewById(R.id.btnPower)
+        val btnModule: Button = findViewById(R.id.btnModule)
 
         val resultView: TextView = findViewById(R.id.resultView)
         val historyView: TextView = findViewById(R.id.historyView)
@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity() {
             btnMultiply.isEnabled = true
             btnDivide.isEnabled = true
             btnSqrt.isEnabled = true
-            btnPower.isEnabled = true
         }
 
         fun deactivateButtons() {
@@ -57,11 +56,10 @@ class MainActivity : AppCompatActivity() {
             btnMultiply.isEnabled = false
             btnDivide.isEnabled = false
             btnSqrt.isEnabled = false
-            btnPower.isEnabled = false
         }
 
         fun defaultSize() {
-            resultView.textSize = 32F
+            resultView.textSize = 40.5F
         }
 
         fun clearHistory() {
@@ -70,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 
         val buttons = listOf(
             btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9,
-            btnEqual, btnPlus, btnMinus, btnMultiply, btnDivide, btnSqrt, btnPower,
+            btnEqual, btnPlus, btnMinus, btnMultiply, btnDivide, btnSqrt,
             btnClean, btnCleanAll, btnDecimal, btnNegate
         )
 
@@ -84,8 +82,10 @@ class MainActivity : AppCompatActivity() {
                 if (currentText == "0") {
                     resultView.text = index.toString()
                 } else {
+                    if(numCount == 9) {
+                        resultView.textSize = 29.5F
+                    }
                     if (numCount >= 10) {
-                        resultView.textSize = 27F
                         Toast.makeText(
                             this,
                             "You have reached the maximum number of digits.",
@@ -192,14 +192,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        btnPower.setOnClickListener {
+        fun calculateModule(number: Double) {
+            val result = number / 100
+            resultView.text = result.toString()
+            historyView.text = number.toInt().toString() + "% = " + result
+            numCount = 0
+        }
+
+        btnModule.setOnClickListener {
             if (resultView.text == "0") {
                 Toast.makeText(this, "Enter a number first", Toast.LENGTH_SHORT).show()
 
             } else {
-                resultView.text = resultView.text.toString() + " ^ "
-                deactivateButtons()
-                btnDecimal.isEnabled = true
+                val number = resultView.text.toString().toDoubleOrNull()
+                calculateModule(number!!)
                 numCount = 0
             }
         }
@@ -235,11 +241,12 @@ class MainActivity : AppCompatActivity() {
 
         btnEqual.setOnClickListener {
             activateButtons()
+            defaultSize()
             btnDecimal.isEnabled = true
             numCount = 0
 
             val text = resultView.text.toString()
-            val operators = listOf("+", "-", "÷", "×", "^")
+            val operators = listOf("+", "-", "÷", "×", "^", "%")
 
             var operationDone = false
 
@@ -256,7 +263,7 @@ class MainActivity : AppCompatActivity() {
                                 "-" -> num1 - num2
                                 "÷" -> num1 / num2
                                 "×" -> num1 * num2
-                                "^" -> Math.pow(num1, num2)
+                                "%" -> num1 % num2
                                 else -> null
                             }
                             if (result != null) {
