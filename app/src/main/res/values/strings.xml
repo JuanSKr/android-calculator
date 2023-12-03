@@ -19,7 +19,6 @@
     <string name="button_clear">C</string>
     <string name="button_clear_entry">CE</string>
     <string name="button_negate">+/-</string>
-    <string name="button_power">^</string>
     <string name="button_sqrt">√</string>
     <string name="button_percent">%</string>
 </resources>
