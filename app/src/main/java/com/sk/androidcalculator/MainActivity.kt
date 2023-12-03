@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         fun defaultSize() {
-            resultView.textSize = 40.5F
+            resultView.textSize = 35F
         }
 
         fun clearHistory() {
@@ -82,8 +82,8 @@ class MainActivity : AppCompatActivity() {
                 if (currentText == "0") {
                     resultView.text = index.toString()
                 } else {
-                    if(numCount == 7) {
-                        resultView.textSize = 29F
+                    if (numCount == 7) {
+                        resultView.textSize = 31F
                     }
                     if (numCount >= 10) {
                         Toast.makeText(
