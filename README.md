@@ -25,11 +25,6 @@ git clone https://github.com/JuanSKr/android-calculator
 - Kotlin
 - Android Studio
 
-## Technologies Used
-
-- Kotlin
-- Android Studio
-
 ## Download
 
 You can download the latest version of the app from the following link:
